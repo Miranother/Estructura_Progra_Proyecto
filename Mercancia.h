@@ -9,4 +9,6 @@ class Mercancia{
 	
 };
 
+// Vamos a darnos de baja
+
 #endif
