@@ -3,6 +3,9 @@
 #define MERCANCIA_H
 
 class Mercancia{
+	private:
+		
+	public:
 	
 };
 
