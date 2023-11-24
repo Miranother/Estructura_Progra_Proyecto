@@ -3,9 +3,6 @@
 #include <fstream>
 #include <iomanip> //Por si llegamos a usar setw
 
-#include <iostream>
-#include <fstream>
-
 using namespace std;
 
 const int MAX_MERCANCIAS = 100;
