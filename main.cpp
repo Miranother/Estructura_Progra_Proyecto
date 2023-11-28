@@ -102,39 +102,41 @@ bool validarMinus(const string& cadena) {
 
 // Función para leer los datos desde la entrada del usuario
 void leerArchivo(Mercancia mercancias[], int& tiposMercancias, int& capacidadBuque) {
-	
-	do{
-		cout << "Ingrese la cantidad de tipos de mercancias (1-99): ";
-    	cin >> tiposMercancias;
-    	if(tiposMercancias<1 || tiposMercancias>100){
-    		cout<<endl<<"Validacion invalida, intentalo de nuevo";
-		}
-	}while(tiposMercancias<1 || tiposMercancias>100);
+    do {
+        cout << "Ingrese la cantidad de tipos de mercancias (1-99): ";
+        cin >> tiposMercancias;
+        if (tiposMercancias < 1 || tiposMercancias > 100) {
+            cout << endl << "Dato invalido, intentalo de nuevo" << endl;
+        }
+    } while (tiposMercancias < 1 || tiposMercancias > 100);
 
-	do{
-    	cout << "Ingrese la capacidad del buque (1-9999): ";
-    	cin >> capacidadBuque;
-    	if(capacidadBuque<1 || capacidadBuque>9999){
-    		cout<<endl<<"Validacion invalida, intentalo de nuevo";
-		}
-	}while(capacidadBuque<1 || capacidadBuque>9999);
-	
+    do {
+        cout << "Ingrese la capacidad del buque (1-9999): ";
+        cin >> capacidadBuque;
+        if (capacidadBuque < 1 || capacidadBuque > 9999) {
+            cout << endl << "Dato invalido, intentalo de nuevo" << endl;
+        }
+    } while (capacidadBuque < 1 || capacidadBuque > 9999);
 
-
-    //Ciclo for para solicitar al usuario las mercancias
+    // Ciclo for para solicitar al usuario las mercancias
     for (int i = 0; i < tiposMercancias; ++i) {
         string nombre;
         int volumen, costo, unidades;
 
+        // Validacion del nombre de la mercancia
+        do {
+            cout << "Ingrese el nombre de la mercancia " << i + 1 << " (max 20 letras minusculas): ";
+            cin >> nombre;
+            if (nombre.length() > 20 || !validarMinus(nombre)) {
+                cout << "Error: El nombre de la mercancia debe tener maximo 20 letras minusculas " << endl;
+            }
+        } while (nombre.length() > 20 || !validarMinus(nombre));
+
+        // Resto de la entrada de datos
         cout << "Ingrese los datos para la mercancia " << i + 1 << ": ";
-        cin >> nombre >> volumen >> costo >> unidades;
+        cin >> volumen >> costo >> unidades;
 
-        // Validaciones para las minusculas y el rango de cantidades 
-        if (nombre.length() > 20 || !validarMinus(nombre)) {
-            cerr << "Error: El nombre de la mercancia debe tener maximo 20 letras minusculas!" << endl;
-            exit(1);
-        }
-
+        // Validaciones para el rango de cantidades
         if (volumen < 1 || volumen > 99999 || costo < 1 || costo > 99999 || unidades < 1 || unidades > 99999) {
             cerr << "Error: Las cantidades deben ser enteros entre 1 y 99999" << endl;
             exit(1);
@@ -143,6 +145,7 @@ void leerArchivo(Mercancia mercancias[], int& tiposMercancias, int& capacidadBuq
         mercancias[i] = Mercancia(nombre, volumen, costo, unidades);
     }
 }
+
 
 void imprimirArchivo(const string& nombreArchivo) {
     ifstream archivo(nombreArchivo.c_str());
