@@ -57,16 +57,11 @@ int main() {
     // Mercancia mercancias[MAX_MERCANCIAS];
     // int tiposMercancias, capacidadBuque;
 
-    // Fase 1: Leer datos desde el archivo
-    //leerDatos("BUQUE.DAT", mercancias, tiposMercancias, capacidadBuque);
-
-    // Fase 1: Mostrar información en pantalla
-    //imprimirDatos(mercancias, tiposMercancias, capacidadBuque);
-
+    
     // Fase 2: Calculo de la forma más óptima (Implementar)
 
     // Fase 2: Escribir resultados en el archivo "Buque.RES"
-    // escribirResultados(solucion);
+    // escribirArchivo(solucion);
 
     // Fase 3: Formas posibles de embarcar la carga (Implementar)
     // formasDeEmbarcar(mercancias, tiposMercancias, capacidadBuque);
