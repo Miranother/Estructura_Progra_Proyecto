@@ -73,7 +73,7 @@ int main() {
 //IMPLEMENTACION
 
 void escribirArchivo(const string& nombreArchivo, const Mercancia mercancias[], int tiposMercancias, int capacidadBuque) {
-    ofstream archivo(nombreArchivo);
+    ofstream archivo(nombreArchivo.c_str());
 
     if (!archivo) {
         cerr << "Error al abrir el archivo " << nombreArchivo << endl;
@@ -91,8 +91,9 @@ void escribirArchivo(const string& nombreArchivo, const Mercancia mercancias[], 
 }
 
 bool validarMinus(const string& cadena) {
-    for (char caracter : cadena) {
-        if (!islower(caracter)) {
+    for (int i = 0; i < cadena.length(); ++i) {
+        char caracter = cadena[i];
+        if (!(caracter >= 'a' && caracter <= 'z')) {
             return false;
         }
     }
@@ -101,11 +102,24 @@ bool validarMinus(const string& cadena) {
 
 // Función para leer los datos desde la entrada del usuario
 void leerArchivo(Mercancia mercancias[], int& tiposMercancias, int& capacidadBuque) {
-    cout << "Ingrese la cantidad de tipos de mercancias (1-99): ";
-    cin >> tiposMercancias;
+	
+	do{
+		cout << "Ingrese la cantidad de tipos de mercancias (1-99): ";
+    	cin >> tiposMercancias;
+    	if(tiposMercancias<1 || tiposMercancias>100){
+    		cout<<endl<<"Validacion invalida, intentalo de nuevo";
+		}
+	}while(tiposMercancias<1 || tiposMercancias>100);
 
-    cout << "Ingrese la capacidad del buque (1-9999): ";
-    cin >> capacidadBuque;
+	do{
+    	cout << "Ingrese la capacidad del buque (1-9999): ";
+    	cin >> capacidadBuque;
+    	if(capacidadBuque<1 || capacidadBuque>9999){
+    		cout<<endl<<"Validacion invalida, intentalo de nuevo";
+		}
+	}while(capacidadBuque<1 || capacidadBuque>9999);
+	
+
 
     //Ciclo for para solicitar al usuario las mercancias
     for (int i = 0; i < tiposMercancias; ++i) {
@@ -131,7 +145,7 @@ void leerArchivo(Mercancia mercancias[], int& tiposMercancias, int& capacidadBuq
 }
 
 void imprimirArchivo(const string& nombreArchivo) {
-    ifstream archivo(nombreArchivo);
+    ifstream archivo(nombreArchivo.c_str());
 
     if (!archivo) {
         cerr << "Error al abrir el archivo " << nombreArchivo << endl;
