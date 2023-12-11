@@ -1,9 +1,9 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <cmath>
-#include <iomanip>
 #include <sstream>
+#include <iomanip>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
@@ -16,6 +16,8 @@ private:
     int unidades;
 
 public:
+    friend class Mercancia;
+
     // Constructor
     Datos() {}
 
@@ -26,27 +28,40 @@ public:
     // Metodos set & get
     // Nombre--------------
     void setNombre(string);
-    string getNombre();
+    string getNombre() const;
     //--------------------
     // Volumen----------
     void setVolumen(int);
-    int getVolumen();
+    int getVolumen() const;
     //-------------------
     // Costo------------
     void setCosto(float);
-    float getCosto();
+    float getCosto() const;
     //-----------------
     // Unidades----------
     void setUnidades(int);
-    int getUnidades();
+    int getUnidades() const;
     //------------------
 
     // Otros metodos
     bool validarMinus(const string& cadena);
     void llenar();
     void imprimir();
-    string getInfo();
+    string getInfo() const;
 };
+
+
+
+// Función de comparación
+bool compararPorPrecioVolumen(const Datos& a, const Datos& b) {
+    // Primero, comparar por precio en orden descendente
+    if (a.getCosto() != b.getCosto()) {
+        return a.getCosto() > b.getCosto();
+    }
+    // Si tienen el mismo precio, comparar por volumen en orden ascendente
+    return a.getVolumen() < b.getVolumen();
+}
+
 
 class Mercancia {
 private:
@@ -64,17 +79,17 @@ public:
 
     // Metodos set y get
     void setTipos(int);
-    int getTipos();
+    int getTipos() const;
     void setCapacidad(int);
-    int getCapacidad();
+    int getCapacidad() const;
     void setMerca(Datos*);
-    Datos getMerca(int);
+    Datos getMerca(int) const;
 
     // Otros metodos
     void escribirArchivo(const string&);
     void imprimirArchivo(const string&);
-    void calcularFormaOptima();
-    void mostrarFormasPosibles();
+    void embarcarMercanciasYGuardar();
+    void fase3();
 };
 
 // Metodos get y set
@@ -83,7 +98,7 @@ void Datos::setNombre(string nombre)
     this->nombre = nombre;
 }
 
-string Datos::getNombre()
+string Datos::getNombre() const
 {
     return this->nombre;
 }
@@ -93,7 +108,7 @@ void Datos::setVolumen(int volumen)
     this->volumen = volumen;
 }
 
-int Datos::getVolumen()
+int Datos::getVolumen() const
 {
     return this->volumen;
 }
@@ -103,7 +118,7 @@ void Datos::setCosto(float costo)
     this->costo = costo;
 }
 
-float Datos::getCosto()
+float Datos::getCosto() const
 {
     return this->costo;
 }
@@ -113,11 +128,11 @@ void Datos::setUnidades(int unidades)
     this->unidades = unidades;
 }
 
-int Datos::getUnidades()
+int Datos::getUnidades() const
 {
     return this->unidades;
 }
-
+//----------------------------------------
 bool Datos::validarMinus(const string& cadena) {
     for (int i = 0; i < cadena.length(); ++i) {
         char caracter = cadena[i];
@@ -185,20 +200,59 @@ void Datos::llenar()
 void Datos::imprimir()
 {
     cout << "Mercancia " << ": " << setw(15) << left << nombre
-         << "Volumen: " << setw(5) << volumen
-         << "Costo: " << setw(5) << costo
-         << "Unidades: " << setw(5) << unidades << endl;
+        << "Volumen: " << setw(5) << volumen
+        << "Costo: " << setw(5) << costo
+        << "Unidades: " << setw(5) << unidades << endl;
 }
 
-string Datos::getInfo()
+string Datos::getInfo() const
 {
     stringstream concatenar;
     concatenar << nombre << " " << volumen << " " << costo << " " << unidades;
     return concatenar.str();
 }
 
+// CLASE MERCANCIA
+// Metodos set y get
+void Mercancia::setTipos(int tipos)
+{
+    if (tipos > 0 && tipos < 100)
+        this->tipos_mercancias = tipos;
+    else
+        cout << "Intentalo de nuevo, tipos de mercancias invalidos" << endl;
+}
+
+int Mercancia::getTipos() const
+{
+    return this->tipos_mercancias;
+}
+
+void Mercancia::setCapacidad(int capacidad)
+{
+    if (capacidad > 0 && capacidad < 10000)
+        this->capacidad_buque = capacidad;
+    else
+        cout << "Intentalo de nuevo, capacidad de buque invalida" << endl;
+}
+
+int Mercancia::getCapacidad() const
+{
+    return this->capacidad_buque;
+}
+
+void Mercancia::setMerca(Datos* merca)
+{
+    this->merca = merca;
+}
+
+Datos Mercancia::getMerca(int n) const
+{
+    return this->merca[n];
+}
+
 // Implementacion del metodo escribirArchivo
-void Mercancia::escribirArchivo(const string& nombreArchivo) {
+void Mercancia::escribirArchivo(const string& nombreArchivo)
+{
     ofstream archivo(nombreArchivo.c_str());
     if (!archivo) {
         cerr << "Error al abrir el archivo " << nombreArchivo << endl;
@@ -216,7 +270,8 @@ void Mercancia::escribirArchivo(const string& nombreArchivo) {
     archivo.close();
 }
 
-void Mercancia::imprimirArchivo(const string& nombreArchivo) {
+void Mercancia::imprimirArchivo(const string& nombreArchivo)
+{
     ifstream archivo(nombreArchivo.c_str());
 
     if (!archivo) {
@@ -237,48 +292,80 @@ void Mercancia::imprimirArchivo(const string& nombreArchivo) {
 
         archivo >> nombre >> volumen >> costo >> unidades;
         merca[i].imprimir();
+
     }
 
     archivo.close();
 }
 
-// Fase 2: Calcular la forma más óptima de embarcar
-void Mercancia::calcularFormaOptima() {
-    // Ordenar mercancias por precio (descendente) y volumen (ascendente)
-    sort(merca, merca + tipos_mercancias, [](Datos a, Datos b) {
-        return (a.getCosto() > b.getCosto()) || (a.getCosto() == b.getCosto() && a.getVolumen() < b.getVolumen());
-    });
+void Mercancia::embarcarMercanciasYGuardar() {
+    sort(merca, merca + tipos_mercancias, compararPorPrecioVolumen);
 
-    int espacio_ocupado = 0;
-    bool hay_espacio_suficiente = true;
+    int espacioDisponible = capacidad_buque;
+    int cargaOptima = 0;
 
-    ofstream archivo_salida("Buque.RES");
+    ofstream archivoRes("Buque.RES");
+    if (!archivoRes) {
+        cerr << "Error al abrir el archivo Buque.RES" << endl;
+        exit(1);
+    }
 
     for (int i = 0; i < tipos_mercancias; ++i) {
-        if (espacio_ocupado + merca[i].getVolumen() <= capacidad_buque) {
-            archivo_salida << merca[i].getInfo() << endl;
-            espacio_ocupado += merca[i].getVolumen();
-        } else {
-            hay_espacio_suficiente = false;
-            break;
+        if (merca[i].getVolumen() <= espacioDisponible && merca[i].getUnidades() > 0) {
+            // Embarcar la mercancía
+            espacioDisponible -= merca[i].getVolumen();
+            merca[i].setUnidades(merca[i].getUnidades() - 1);
+
+            // Imprimir la información de la mercancía embarcada
+            cout << merca[i].getNombre() << " " << merca[i].getVolumen() << " " << merca[i].getCosto() << " " << merca[i].getUnidades() << endl;
+
+            // Escribir en el archivo .RES
+            archivoRes << merca[i].getInfo() << endl;
+
+            cargaOptima += merca[i].getCosto();
         }
     }
 
-    archivo_salida.close();
+    archivoRes.close();
 
-    if (!hay_espacio_suficiente) {
-        cout << "Error: No hay espacio suficiente para embarcar la mercancía." << endl;
+    if (cargaOptima > 0) {
+        cout << "Carga óptima alcanzada. Costo total: " << cargaOptima << endl;
+    } else {
+        cout << "Carga inalcanzable." << endl;
     }
 }
 
-// Fase 3: Devolver todas las formas posibles de embarcar la carga
-void Mercancia::mostrarFormasPosibles() {
-    int formas_posibles = pow(2, tipos_mercancias) - 1;
-    cout << "Número de formas posibles: " << formas_posibles << endl;
-}
+// Método para obtener todas las formas posibles de embarcar la carga
+void Mercancia::fase3() {
+    int formasPosibles = 0;
 
-int main() {
+    sort(merca, merca + tipos_mercancias, compararPorPrecioVolumen);
+
+    do {
+        int espacioDisponible = capacidad_buque;
+        int cargaOptima = 0;
+
+        for (int i = 0; i < tipos_mercancias; ++i) {
+            if (merca[i].getVolumen() <= espacioDisponible && merca[i].getUnidades() > 0) {
+                espacioDisponible -= merca[i].getVolumen();
+                merca[i].setUnidades(merca[i].getUnidades() - 1);
+
+                cargaOptima += merca[i].getCosto();
+            }
+        }
+
+        if (cargaOptima > 0) {
+            formasPosibles++;
+        }
+
+    } while (next_permutation(merca, merca + tipos_mercancias, compararPorPrecioVolumen));
+
+    cout << "Formas diferentes de embarcar la carga: " << formasPosibles << endl;
+}
+int main()
+{
     Mercancia dat;
+
     int tipos = 0, capacidadBuque = 0;
 
     do {
@@ -295,7 +382,8 @@ int main() {
 
     Datos* merca = new Datos[tipos];
 
-    for (int i = 0; i < tipos; ++i) {
+    for (int i = 0; i < tipos; ++i)
+    {
         cout << endl << "Dame los datos para la mercancia [" << i + 1 << "]: " << endl;
         merca[i].llenar();
     }
@@ -305,11 +393,9 @@ int main() {
     dat.escribirArchivo("Buque.dat");
     dat.imprimirArchivo("Buque.dat");
 
-    // Fase 2: Calcular la forma más óptima de embarcar
-    dat.calcularFormaOptima();
-
-    // Fase 3: Mostrar todas las formas posibles de embarcar la carga
-    dat.mostrarFormasPosibles();
+    // Fase 2 y 3: Embarcar mercancias y mostrar formas posibles
+    dat.embarcarMercanciasYGuardar();
+    dat.fase3();
 
     return 0;
 }
