@@ -1,1 +1,2 @@
-te 300 15 3
+kiwis 300 20 3
+platanos 200 8 10
