@@ -1,3 +1,5 @@
+#include "Mercancia.h"
+// CLASE MERCANCIA
 #include <sstream>
 #include <iomanip>
 #include <fstream>
@@ -5,239 +7,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-
-using namespace std;
-
-//InformaciÃ³n de la mercancia
-class Datos
-{
-
-private:
-    string nombre;
-    int volumen;
-    float costo;
-    int unidades;
-
-public:
-    friend class Mercancia;
-    // Constructor
-    Datos() {}
-    // Constructor con parametros
-    Datos(const string &nombre, int volumen, int costo, int unidades)
-        : nombre(nombre), volumen(volumen), costo(costo), unidades(unidades) {}
-
-    // Metodos set & get
-    // Nombre--------------
-
-    void setNombre(string);
-    string getNombre();
-    //--------------------
-    // Volumen----------
-    void setVolumen(int);
-    int getVolumen();
-    //-------------------
-    // Costo------------
-    void setCosto(float);
-    float getCosto();
-    //-----------------
-    // Unidades----------
-    void setUnidades(int);
-    int getUnidades();
-    //------------------
-
-    // Otros metodos
-    bool validarMinus(const string &cadena);
-    void llenar();
-    void imprimir();
-    string getInfo() const;
-}; // CLASE DATOS
-
-
-
-
-//InformaciÃ³n del buque
-class Mercancia
-{
-private:
-    int tipos_mercancias;
-    int capacidad_buque;
-    Datos *merca;
-    void escribirRES(const vector<Datos> &seleccionados);
-
-public:
-    string archivo;
-    // Constructor vacio
-    Mercancia() {}
-    // Constructor con parametros
-    Mercancia(int tipos, int capacidad, Datos *merca) : tipos_mercancias(tipos), capacidad_buque(capacidad), merca(merca) {}
-
-    // Metodos set y get
-    void setTipos(int);
-    int getTipos();
-    void setCapacidad(int);
-    int getCapacidad();
-    void setMerca(Datos *);
-    Datos getMerca(int);
-
-    // Otros metodos
-    bool leerDatos();
-    int combinaciones();
-    void calcularCargaOptima();
-    void ingresarDatos();
-    void mostrarResultados();
-    void escribirArchivo(const string &);
-    void imprimirArchivo(const string &);
-
-    //Destructor
-    ~Mercancia() {
-        //usamos delete[] para liberar la memoria asignada al arreglo merca
-        delete[] merca;
-    }
-};
-
-// Metodos get y set
-void Datos::setNombre(string nombre)
-{
-    this->nombre = nombre;
-}
-
-string Datos::getNombre()
-{
-    return this->nombre;
-}
-
-void Datos::setVolumen(int volumen)
-{
-    this->volumen = volumen;
-}
-
-int Datos::getVolumen()
-{
-    return this->volumen;
-}
-
-void Datos::setCosto(float costo)
-{
-    this->costo = costo;
-}
-
-float Datos::getCosto()
-{
-    return this->costo;
-}
-
-void Datos::setUnidades(int unidades)
-{
-    this->unidades = unidades;
-}
-
-int Datos::getUnidades()
-{
-    return this->unidades;
-}
-
-//----------------------------------------
-//Valida que el nombre de la mercancia sean minusculas, y no exista ninguna mayusscula
-bool Datos::validarMinus(const string &cadena)
-{
-    for (int i = 0; i < cadena.length(); ++i)
-    {
-        char caracter = cadena[i];
-        if (!(caracter >= 'a' && caracter <= 'z'))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-// Solicitar los datos de la mercancia al usuario
-void Datos::llenar()
-{
-    do
-    {
-        cout << "Dame el nombre de la Mercancia : ";
-        fflush(stdin);
-        getline(cin, nombre);
-
-        if (nombre.length() > 20)
-        {
-            cout << "Error: El nombre de la mercancia debe tener maximo 20 letras " << endl;
-        }
-        else if (!validarMinus(nombre))
-        {
-            cout << "Error: El nombre de la mercancia debe tener letras minusculas" << endl;
-        }
-
-    } while (nombre.length() > 20 || !validarMinus(nombre));
-
-    do
-    {
-        cout << endl
-             << "Dame el volumen para la mercancia : ";
-        cin >> volumen;
-        if (volumen < 1)
-            cout << endl
-                 << "Volumen menor a la capacidad minima, intentalo de nuevo";
-        else if (volumen > 99999)
-            cout << endl
-                 << "Volumen mayor a la capacidad maxima, intentalo de nuevo";
-
-    } while (volumen < 1 || volumen > 99999);
-
-    do
-    {
-        cout << endl
-             << "Dame el costo para la mercancia : ";
-        cin >> costo;
-        if (costo < 1)
-            cout << endl
-                 << "Costo menor a la capacidad minima, intentalo de nuevo";
-        else if (costo > 99999)
-            cout << endl
-                 << "Costo mayor a la capacidad maxima, intentalo de nuevo";
-
-    } while (costo < 1 || costo > 99999);
-
-    do
-    {
-        cout << endl
-             << "Dame las unidades de la mercancia : ";
-        cin >> unidades;
-
-        if (unidades < 1)
-            cout << endl
-                 << "Unidades menores a la capacidad minima, intentalo de nuevo";
-        else if (unidades > 99999)
-            cout << endl
-                 << "Unidades mayores a la capacidad maxima, intentalo de nuevo";
-
-    } while (unidades < 1 || unidades > 99999);
-}
-
-
-//Imprimir datos de la mercancia
-void Datos::imprimir()
-{
-    cout << "Mercancia "
-         << ": " << setw(15) << left << nombre
-         << "Volumen: " << setw(5) << volumen
-         << "Costo: " << setw(5) << costo
-         << "Unidades: " << setw(5) << unidades << endl;
-}
-
-
-//Concatena las palabras para mandarla al archivo
-string Datos::getInfo() const
-{
-    stringstream concatenar;
-    concatenar << nombre << " " << volumen << " " << costo << " " << unidades;
-    return concatenar.str();
-}
-
-
-// CLASE MERCANCIA
-
+#include"interfaz.h"
 
 // Implementacion de metodos set y get
 void Mercancia::setTipos(int tipos)
@@ -314,7 +84,8 @@ void Mercancia::imprimirArchivo(const string &nombreArchivo)
 
     int tiposMercancias, capacidadBuque;
     archivo >> tiposMercancias >> capacidadBuque;
-
+		textcolor(2);
+	
     cout << endl
          << "Imprimiendo informacion............." << endl
          << endl;
@@ -360,7 +131,7 @@ bool Mercancia::leerDatos()
 
 
 //Escribe el resultado de la carga optima en un archivo .RES
-void Mercancia::escribirRES(const vector<Datos> &seleccionados)
+void Mercancia::escribirRES(vector<Datos> &seleccionados)
 {
     ofstream archivo("Buque.RES");
     if (!archivo)
@@ -466,6 +237,8 @@ void Mercancia::calcularCargaOptima()
             item.setUnidades(cantidadPosible);
             seleccionados.push_back(item);
             capacidadRestante -= cantidadPosible * item.getVolumen();
+            	textcolor(5);
+	
 
             // Imprimir información de depuración
             cout << "Seleccionado: " << item.getNombre() << ", Unidades: " << cantidadPosible << ", Capacidad restante ahora: " << capacidadRestante << endl;
@@ -497,7 +270,8 @@ void Mercancia::ingresarDatos()
 
     // Pedir al usuario que ingrese los datos de las mercancÃ­as y la capacidad del buque
     int tipos = 0, capacidadBuque = 0;
-
+		textcolor(9);
+	
     cout << "Ingrese el total de tipos de mercancias (1-99): ";
     cin >> tipos;
     setTipos(tipos);
@@ -510,7 +284,10 @@ void Mercancia::ingresarDatos()
 
     for (int i = 0; i < tipos; ++i)
     {
+    		textcolor(1);
         cout << endl
+        
+	
              << "Dame los datos para la mercancia [" << i + 1 << "]: " << endl;
         merca[i].llenar();
     }
@@ -545,59 +322,3 @@ void Mercancia::mostrarResultados()
     }
 }
 
-int main()
-{
-    Mercancia dat;
-    int opcion = 0, totalCombinaciones;
-
-    do
-    {
-        cout << "\nMenu de Opciones:\n";
-        cout << "1. Ingresar Datos de Mercancias\n";
-        cout << "2. Calcular Carga Optima\n";
-        cout << "3. Mostrar Carga Optima\n";
-        cout << "4. Imprimir combinaciones totales\n";
-        cout << "5. Salir\n";
-        cout << "Seleccione una opcion: ";
-        cin >> opcion;
-
-        switch (opcion)
-        {
-        case 1:
-            dat.ingresarDatos();
-            break;
-        case 2:
-            if (dat.leerDatos())
-            { // Intenta leer datos de "Buque.dat, si hay datos o existe el .dat, procede a calcular la carga optima
-                dat.calcularCargaOptima();
-                cout << "Carga optima calculada. Verifique el archivo 'Buque.RES' para los resultados." << endl;
-            }
-            else
-            {
-                cout << "Por favor, ingrese los datos primero utilizando la opcion 1." << endl;
-            }
-            break;
-        case 3:
-            dat.mostrarResultados();
-            break;
-        case 4:
-            if (dat.leerDatos())
-            {
-                totalCombinaciones = dat.combinaciones();
-                cout << "Total de combinaciones posibles: " << totalCombinaciones << endl;
-            }
-            else
-            {
-                cout << "Por favor, ingrese los datos primero utilizando la opcion 1." << endl;
-            }
-            break;
-        case 5:
-            cout << "Saliendo del programa...\n";
-            break;
-        default:
-            cout << "Opcion no valida. Por favor, intente de nuevo.\n";
-        }
-    } while (opcion != 5);
-
-    return 0;
-}
