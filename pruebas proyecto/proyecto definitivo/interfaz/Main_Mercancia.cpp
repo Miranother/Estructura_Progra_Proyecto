@@ -14,7 +14,7 @@ int main()
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleInfo);
     int consoleWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left + 1;
     int consoleHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1;
-	
+	Datos* datos=new Datos("Papas",200,200,5);	
 	
 	 const int anchoMarco = 100;
     const int altoMarco = 42;
@@ -63,6 +63,7 @@ int main()
             else
             {
                 cout << "Por favor, ingrese los datos primero utilizando la opcion 1." << endl;
+                
             }
             break;
         case 5:
