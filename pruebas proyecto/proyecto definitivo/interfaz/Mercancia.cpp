@@ -241,7 +241,8 @@ void Mercancia::calcularCargaOptima()
 	
 
             // Imprimir información de depuración
-            cout << "Seleccionado: " << item.getNombre() << ", Unidades: " << cantidadPosible << ", Capacidad restante ahora: " << capacidadRestante << endl;
+            cout << " Mercancia seleccionada: " << item.getNombre() << ", Unidades: " << cantidadPosible << ", Capacidad del buque restante: " << capacidadRestante << endl;
+            cout << endl;
         }
     }
     // Escribir los resultados en el archivo "Buque.RES"

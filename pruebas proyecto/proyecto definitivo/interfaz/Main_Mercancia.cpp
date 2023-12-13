@@ -16,7 +16,7 @@ int main()
     int consoleHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1;
 	Datos* datos=new Datos("Papas",200,200,5);	
 	
-	 const int anchoMarco = 100;
+	const int anchoMarco = 100;
     const int altoMarco = 42;
     
     int startX = (consoleWidth - anchoMarco) / 2;
