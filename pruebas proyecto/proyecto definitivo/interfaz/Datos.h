@@ -53,9 +53,7 @@ class Dato2:public Datos{
 	private:
 		
 	public:
-		void titulo(){
-		cout<<endl<<"DATOS";	
-		}
+		void titulo();
 		virtual void copia_datos()=0;
 		
 };
