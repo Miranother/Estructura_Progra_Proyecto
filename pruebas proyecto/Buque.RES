@@ -1,2 +1,2 @@
-kiwis 300 20 3
-platanos 200 8 10
+algodon 100 20 5
+cafe 200 30 2
