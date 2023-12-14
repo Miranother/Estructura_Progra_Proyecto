@@ -49,15 +49,6 @@ class Datos{
     void imprimir();
     string getInfo();
 };
-class Dato2:public Datos{
-	private:
-		
-	public:
-		void titulo();
-		virtual void copia_datos()=0;
-		
-};
-
 
 
 #endif

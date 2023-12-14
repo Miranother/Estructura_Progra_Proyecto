@@ -3,50 +3,21 @@
 #include <iomanip>
 #include <string>
 #include "interfaz.h"
-// Metodos get y set
-void Datos::setNombre(string nombre)
+void ListaDatos:: imprimir() 
 {
-    this->nombre = nombre;
+    Datos* actual = cabeza;
+    while (actual != NULL) 
+	{
+        cout << "Nombre: " << actual->nombre
+        << "Volumen: " << actual->volumen
+        << "Costo: " << actual->costo
+        << "Unidades: " << actual->unidades << endl;
+        actual = actual->sig;
+    }
 }
 
-string Datos::getNombre()
-{
-    return this->nombre;
-}
 
-void Datos::setVolumen(int volumen)
-{
-    this->volumen = volumen;
-}
-
-int Datos::getVolumen()
-{
-    return this->volumen;
-}
-
-void Datos::setCosto(float costo)
-{
-    this->costo = costo;
-}
-
-float Datos::getCosto()
-{
-    return this->costo;
-}
-
-void Datos::setUnidades(int unidades)
-{
-    this->unidades = unidades;
-}
-
-int Datos::getUnidades()
-{
-    return this->unidades;
-}
-
-//----------------------------------------
-//Valida que el nombre de la mercancia sean minusculas, y no exista ninguna mayusscula
-bool Datos::validarMinus(const string &cadena)
+bool ListaDatos::validarMinus(const string &cadena)
 {
     for (int i = 0; i < cadena.length(); ++i)
     {
@@ -59,9 +30,15 @@ bool Datos::validarMinus(const string &cadena)
     return true;
 }
 
-// Solicitar los datos de la mercancia al usuario
-void Datos::llenar(){
-	 CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+
+void ListaDatos::llenar() 
+{
+    string nombre;
+    int volumen;
+    float costo;
+    int unidades;
+
+	CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleInfo);
     int consoleWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left + 1;
     int consoleHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1;
@@ -77,7 +54,7 @@ void Datos::llenar(){
     {
     	textcolor(1);
 	
-    		cout << "Dame el nombre de la Mercancia : ";
+    	cout << "Dame el nombre de la Mercancia : ";
         fflush(stdin);
         getline(cin, nombre);
 
@@ -135,29 +112,47 @@ void Datos::llenar(){
                  << "Unidades mayores a la capacidad maxima, intentalo de nuevo";
 
     } while (unidades < 1 || unidades > 99999);
+
 }
 
-
-//Imprimir datos de la mercancia
-void Datos::imprimir()
+void ListaDatos::agregarElemento(const string& nombre, int volumen, float costo, int unidades)
 {
-		textcolor(3);
-	
-    cout << "Mercancia "
-         << ": " << setw(15) << left << nombre
-         << "Volumen: " << setw(5) << volumen
-         << "Costo: " << setw(5) << costo
-         << "Unidades: " << setw(5) << unidades << endl;
+    Datos* nuevo = new Datos;
+    nuevo->nombre = nombre;
+    nuevo->volumen = volumen;
+    nuevo->costo = costo;
+    nuevo->unidades = unidades;
+    nuevo->sig = cabeza;
+    cabeza = nuevo;	
 }
 
 
-//Concatena las palabras para mandarla al archivo
-string Datos::getInfo() 
+string ListaDatos::getInfo() 
 {
     stringstream concatenar;
-    concatenar << nombre << " " << volumen << " " << costo << " " << unidades;
-    return concatenar.str();
+    Datos* actual = cabeza;
+    while (actual != NULL) 
+	{
+        concatenar << actual->nombre << " " 
+    	<< actual->volumen << " " 
+        << actual->costo << " " 
+        << actual->unidades << "\n";
+        actual = actual->sig;
+	}
+        return concatenar.str();
 }
 
 
 
+
+
+ListaDatos::~ListaDatos() 
+{
+    Datos* actual = cabeza;
+    while (actual != NULL) 
+	{
+        Datos* aBorrar = actual;
+        actual = actual->sig;
+        delete aBorrar;
+    }
+}
