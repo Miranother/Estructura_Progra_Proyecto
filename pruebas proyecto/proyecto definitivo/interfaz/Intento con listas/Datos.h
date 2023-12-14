@@ -26,6 +26,8 @@ public:
 	void llenar();
     bool validarMinus(const string& cadena);
     void imprimir();
+    int getTotalVolumen();
+    int getTotalUnidades();  
     string getInfo();    
     ~ListaDatos();
 };

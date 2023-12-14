@@ -167,25 +167,21 @@ int Mercancia::combinaciones()
     }
 
     // Llenar la matriz
-    for (int i = 1; i <= tipos_mercancias; ++i)
-    {
-        for (int j = 1; j <= capacidad_buque; ++j)
-        {
-            dp[i][j] = dp[i - 1][j]; // No incluir la mercancía i
-            if (merca[i - 1].getVolumen() <= j)
-            {
-                for (int k = 1; k <= merca[i - 1].getUnidades(); ++k)
-                {
-                    if (k * merca[i - 1].getVolumen() <= j)
-                    {
-                        // Agregar combinaciones incluyendo k unidades de la mercancía i
-                        dp[i][j] += dp[i - 1][j - k * merca[i - 1].getVolumen()];
+    for (int i = 1; i <= tipos_mercancias; ++i) {
+        for (int j = 1; j <= capacidad_buque; ++j) {
+            dp[i][j] = dp[i - 1][j];
+            int volumen = merca[i - 1].getTotalVolumen();
+            int unidades = merca[i - 1].getTotalUnidades();
+
+            if (volumen <= j) {
+                for (int k = 1; k <= unidades; ++k) {
+                    if (k * volumen <= j) {
+                        dp[i][j] += dp[i - 1][j - k * volumen];
                     }
                 }
             }
         }
     }
-
     return dp[tipos_mercancias][capacidad_buque];
 }
 

@@ -142,9 +142,27 @@ string ListaDatos::getInfo()
         return concatenar.str();
 }
 
+int ListaDatos::getTotalVolumen()
+ {
+    int total = 0;
+    Datos* actual = cabeza;
+    while (actual) {
+        total += actual->volumen;
+        actual = actual->sig;
+    }
+    return total;
+}
 
-
-
+int ListaDatos::getTotalUnidades() 
+{
+        int total = 0;
+        Datos* actual = cabeza;
+        while (actual) {
+            total += actual->unidades;
+            actual = actual->sig;
+        }
+        return total;
+}
 
 ListaDatos::~ListaDatos() 
 {
