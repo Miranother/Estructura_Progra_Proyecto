@@ -13,8 +13,7 @@ int main()
 	CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleInfo);
     int consoleWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left + 1;
-    int consoleHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1;
-	Datos* datos=new Datos("Papas",200,200,5);	
+    int consoleHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1;	
 	
 	const int anchoMarco = 100;
     const int altoMarco = 42;

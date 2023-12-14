@@ -97,7 +97,7 @@ void titulo(int startX, int startY ){
 }
 void primeraPantalla() {
     system("cls");
-    // Tamaño del marco
+    // Tamaï¿½o del marco
     const int anchoMarco = 100;
     const int altoMarco = 42;
 
@@ -110,7 +110,7 @@ void primeraPantalla() {
     string nom2="-Borjon Munoz Dulce Maria";
     string nom3="-Blanco Ortiz Carlos Enrique";
     string nom4="-Ortega de Luna Juan Damian";
-    string profesor = "Profesora: Juan Pedro Cisnero Santoyo";
+    string profesor = "Profesora: Blanca Gudalupe Estrada Renteria";
     string fecha = "13 de Diciembre de 2023";
 
     // Obtener el ancho y alto de la consola
@@ -119,7 +119,7 @@ void primeraPantalla() {
     int consoleWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left + 1;
     int consoleHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1;
 
-    // Calcular la posición de inicio para centrar la pantalla
+    // Calcular la posiciï¿½n de inicio para centrar la pantalla
     int startX = (consoleWidth - anchoMarco) / 2;
     int startY = (consoleHeight - altoMarco) / 6;
 
@@ -133,7 +133,7 @@ void primeraPantalla() {
         }
         for (int j = 0; j < anchoMarco; j++) {
             if (i == 0 || i == altoMarco - 1 || j == 0 || j == anchoMarco - 1) {
-                // Cambiar el color del marco en cada iteración
+                // Cambiar el color del marco en cada iteraciï¿½n
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
                 cout << char(178);
             } else {
@@ -163,7 +163,7 @@ void primeraPantalla() {
     cout << endl;
     cout << endl;
     //gotoxy(0,45); cout << "Presiona 'S' para pasar a la segunda pantalla o cualquier otra tecla para salir...";
-   //char opcion = _getch(); // Esperar la entrada de una tecla (función específica de Windows)
+   //char opcion = _getch(); // Esperar la entrada de una tecla (funciï¿½n especï¿½fica de Windows)
 	 gotoxy(startX+35, startY +42);
 	 system("pause");
 	 
@@ -186,7 +186,7 @@ int  menu(){
     int consoleWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left + 1;
     int consoleHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1;
 	int opc;
-    // Calcular la posición de inicio para centrar la pantalla
+    // Calcular la posiciï¿½n de inicio para centrar la pantalla
     int startX = (consoleWidth - anchoMarco) / 2;
     int startY = (consoleHeight - altoMarco) / 6;
 
@@ -222,7 +222,7 @@ int  menu(){
         for (int i = 0; i < 5; i++) 
 		{
 			gotoxy(startX+25,startY+ 13+n);
-            // Cambiar el color de la opción seleccionada
+            // Cambiar el color de la opciï¿½n seleccionada
             if (i == opcion) 
 			{
              SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
