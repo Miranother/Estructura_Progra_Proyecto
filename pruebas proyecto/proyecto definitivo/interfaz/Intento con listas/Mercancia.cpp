@@ -188,15 +188,24 @@ int Mercancia::combinaciones()
 //Calcula la carga optima a embarcar
 void Mercancia::calcularCargaOptima()
 {
-    // Crear un vector de pares para el valor por volumen y el Ã­ndice de la mercancÃ­a
-	vector<float> valores;
-	vector<int> indices;
+    vector<float> valores;
+    vector<int> indices;
 
-	for (int i = 0; i < tipos_mercancias; ++i)
-	{
-	    valores.push_back(merca[i].getCosto() / merca[i].getVolumen());
-	    indices.push_back(i);
-	}
+    for (int i = 0; i < tipos_mercancias; ++i) {
+        float valorTotal = 0;
+        int volumenTotal = merca[i].getTotalVolumen();
+        int unidadesTotal = merca[i].getTotalUnidades();
+
+        Datos* actual = merca[i].getCabeza();
+        while (actual != NULL) {
+            valorTotal += actual->costo * actual->unidades;
+            actual = actual->sig;
+        }
+
+        float valorPorVolumen = volumenTotal > 0 ? valorTotal / volumenTotal : 0;
+        valores.push_back(valorPorVolumen);
+        indices.push_back(i);
+    }
 
 
     // Ordenamiento por burbuja
@@ -213,33 +222,34 @@ void Mercancia::calcularCargaOptima()
         }
     }
 
-    // Seleccionar las mercancÃ­as
-    vector<Datos> seleccionados;
+    vector<ListaDatos> seleccionados;
     int capacidadRestante = capacidad_buque;
 
-    for (size_t i = 0; i < valores.size(); ++i)
-    {
-        const int idx = indices[i];
-        int capacidadParaUnaUnidad = merca[idx].getVolumen();
+for (size_t i = 0; i < valores.size(); ++i) {
+    const int idx = indices[i];
+    Datos* actual = merca[idx].getCabeza();
+    while (actual != NULL && capacidadRestante > 0) {
+        int capacidadParaUnaUnidad = actual->volumen;
 
-        // Verificar si hay capacidad para al menos una unidad
-        if (capacidadParaUnaUnidad <= capacidadRestante)
-        {
-            int cantidadMaxima = min(merca[idx].getUnidades(), capacidadRestante / capacidadParaUnaUnidad);
-            int cantidadPosible = max(1, cantidadMaxima); // Asegurarse de que al menos una unidad sea seleccionada
+        if (capacidadParaUnaUnidad <= capacidadRestante) {
+            int cantidadMaxima = min(actual->unidades, capacidadRestante / capacidadParaUnaUnidad);
+            int cantidadPosible = max(1, cantidadMaxima);
 
-            Datos item = merca[idx];
-            item.setUnidades(cantidadPosible);
-            seleccionados.push_back(item);
-            capacidadRestante -= cantidadPosible * item.getVolumen();
-            	textcolor(5);
-	
+            ListaDatos listaSeleccionada;
+            Datos item = *actual;
+            item.unidades = cantidadPosible;
+            listaSeleccionada.agregarElemento(item.nombre, item.volumen, item.costo, item.unidades);
 
-            // Imprimir información de depuración
-            cout << " Mercancia seleccionada: " << item.getNombre() << ", Unidades: " << cantidadPosible << ", Capacidad del buque restante: " << capacidadRestante << endl;
-            cout << endl;
+            seleccionados.push_back(listaSeleccionada);
+            capacidadRestante -= cantidadPosible * item.volumen;
+
+            cout << " Mercancia seleccionada: " << item.nombre << ", Unidades: " << cantidadPosible << ", Capacidad del buque restante: " << capacidadRestante << endl;
         }
+
+        actual = actual->sig;
     }
+}
+
     // Escribir los resultados en el archivo "Buque.RES"
     escribirRES(seleccionados);
 }
@@ -276,7 +286,7 @@ void Mercancia::ingresarDatos()
     cin >> capacidadBuque;
     setCapacidad(capacidadBuque);
 
-    Datos *merca = new Datos[tipos];
+    ListaDatos *merca = new ListaDatos[tipos];
 
     for (int i = 0; i < tipos; ++i)
     {

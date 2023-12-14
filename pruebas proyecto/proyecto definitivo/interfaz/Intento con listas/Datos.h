@@ -29,6 +29,9 @@ public:
     int getTotalVolumen();
     int getTotalUnidades();  
     string getInfo();    
+    Datos* getCabeza(){
+        return cabeza;
+    }    
     ~ListaDatos();
 };
 
